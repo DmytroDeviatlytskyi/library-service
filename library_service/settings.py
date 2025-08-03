@@ -21,7 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-#t4q$x7_oe_aqau6fv2j+-t3!vre(3zrelpns01*)5in*o_jpp"
+SECRET_KEY = (
+    "django-insecure-#t4q$x7_oe_aqau6fv2j+-t3!vre(3zrelpns01*)5in*o_jpp"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -131,6 +133,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_PERMISSION_CLASSES": ("books.permissions.IsAdminOrReadOnly",),
 }
 
 SIMPLE_JWT = {
