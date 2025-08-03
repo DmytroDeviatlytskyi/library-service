@@ -127,13 +127,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "user.User"
 
-DJANGO_REST_FRAMEWORK = {
+REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
+    ),
 }
 
 SIMPLE_JWT = {
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZE",
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "ROTATE_REFRESH_TOKENS": False,
