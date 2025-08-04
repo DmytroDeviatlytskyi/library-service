@@ -8,10 +8,10 @@ from borrowings.serializers import (
 
 
 class BorrowingListView(generics.ListAPIView):
-    queryset = Borrowing.objects.all()
+    queryset = Borrowing.objects.select_related("user", "book")
     serializer_class = BorrowingListSerializer
 
 
 class BorrowingDetailView(generics.RetrieveAPIView):
-    queryset = Borrowing.objects.all()
+    queryset = Borrowing.objects.select_related("user", "book")
     serializer_class = BorrowingDetailSerializer
