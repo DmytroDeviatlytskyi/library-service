@@ -10,7 +10,7 @@ class BorrowingListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Borrowing
-        fields = ("id", "book", "expected_return_date")
+        fields = ("id", "user", "book", "expected_return_date")
 
 
 class BorrowingDetailSerializer(serializers.ModelSerializer):
