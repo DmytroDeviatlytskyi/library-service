@@ -10,6 +10,7 @@ from borrowings.serializers import (
     BorrowingDetailSerializer,
     BorrowingListSerializer,
     BorrowingCreateSerializer,
+    BorrowingReturnSerializer,
 )
 
 
@@ -45,6 +46,9 @@ class BorrowingViewSet(
         elif self.action == "retrieve":
             return BorrowingDetailSerializer
 
+        elif self.action == "return_borrowing":
+            return BorrowingReturnSerializer
+
         return BorrowingCreateSerializer
 
     def perform_create(self, serializer):
@@ -72,7 +76,6 @@ class BorrowingViewSet(
             borrowing.save()
             borrowing.book.inventory += 1
             borrowing.book.save()
+            serializer = self.get_serializer(borrowing)
 
-            return Response(
-                {"message": "Book returned!"}, status=status.HTTP_200_OK
-            )
+            return Response(serializer.data, status=status.HTTP_200_OK)
