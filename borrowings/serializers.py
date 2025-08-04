@@ -6,11 +6,17 @@ from borrowings.models import Borrowing
 
 
 class BorrowingListSerializer(serializers.ModelSerializer):
-    book = serializers.CharField(source="book.title", read_only=True)
+    book_title = serializers.CharField(source="book.title", read_only=True)
 
     class Meta:
         model = Borrowing
-        fields = ("id", "user", "book", "expected_return_date")
+        fields = (
+            "id",
+            "user",
+            "book_title",
+            "expected_return_date",
+            "actual_return_date",
+        )
 
 
 class BorrowingDetailSerializer(serializers.ModelSerializer):
@@ -57,3 +63,11 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"detail": f"User has already borrowed book `{book.title}`"}
             )
+
+
+class BorrowingReturnSerializer(serializers.ModelSerializer):
+    book_title = serializers.CharField(source="book.title", read_only=True)
+
+    class Meta:
+        model = Borrowing
+        fields = ("id", "book_title", "actual_return_date")
