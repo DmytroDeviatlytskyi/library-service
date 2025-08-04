@@ -55,7 +55,7 @@ class BorrowingViewSet(
         serializer.save(user=self.request.user)
 
     @action(
-        methods=["GET"],
+        methods=["POST"],
         detail=True,
         url_path="return",
         permission_classes=[
@@ -72,10 +72,15 @@ class BorrowingViewSet(
             )
 
         with transaction.atomic():
-            borrowing.actual_return_date = now().date()
+            if request.data["actual_return_date"]:
+                borrowing.actual_return_date = request.data["actual_return_date"]
+            else:
+                borrowing.actual_return_date = now().date()
             borrowing.save()
             borrowing.book.inventory += 1
             borrowing.book.save()
-            serializer = self.get_serializer(borrowing)
 
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(
+                {"message": f"The book: `{borrowing.book.title}` was returned."},
+                status=status.HTTP_200_OK,
+            )
