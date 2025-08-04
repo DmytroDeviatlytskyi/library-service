@@ -73,7 +73,9 @@ class BorrowingViewSet(
 
         with transaction.atomic():
             if request.data["actual_return_date"]:
-                borrowing.actual_return_date = request.data["actual_return_date"]
+                borrowing.actual_return_date = request.data[
+                    "actual_return_date"
+                ]
             else:
                 borrowing.actual_return_date = now().date()
             borrowing.save()
@@ -81,6 +83,9 @@ class BorrowingViewSet(
             borrowing.book.save()
 
             return Response(
-                {"message": f"The book: `{borrowing.book.title}` was returned."},
+                {
+                    "message": f"The book:"
+                    f" `{borrowing.book.title}` was returned."
+                },
                 status=status.HTTP_200_OK,
             )
