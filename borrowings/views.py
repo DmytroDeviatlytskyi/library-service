@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.utils.timezone import now
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -25,6 +26,10 @@ class BorrowingViewSet(
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
+        """
+        Only staff users can filter borrowings by user_id.
+        Non-admin users can see only their own borrowings.
+        """
         queryset = self.queryset
         if not self.request.user.is_staff:
             queryset = self.queryset.filter(user=self.request.user)
@@ -54,6 +59,10 @@ class BorrowingViewSet(
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    @extend_schema(
+        request=BorrowingReturnSerializer,
+        description="Endpoint for return borrowing book",
+    )
     @action(
         methods=["POST"],
         detail=True,
@@ -89,3 +98,27 @@ class BorrowingViewSet(
                 },
                 status=status.HTTP_200_OK,
             )
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "is_active",
+                type=str,
+                description=(
+                    "Filter borrowings by `is_active` if "
+                    "actual_return_date is null (ex. `?is_active=true`)"
+                ),
+            ),
+            OpenApiParameter(
+                "user_id",
+                type=str,
+                description=(
+                    "Filter borrowings by `user_id` "
+                    "for admin-user (ex. `?user_id=3`)"
+                ),
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        """Get list of borrowings"""
+        return super().list(request, *args, **kwargs)
