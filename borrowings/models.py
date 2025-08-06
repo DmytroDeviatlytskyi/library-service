@@ -21,4 +21,4 @@ class Borrowing(models.Model):
         unique_together = ("user", "book")
 
     def __str__(self):
-        return f"{self.user} email: {self.user.email} borrowed {self.book}"
+        return f"{self.user} borrowed {self.book}"

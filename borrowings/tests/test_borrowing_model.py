@@ -32,15 +32,19 @@ class BorrowingModelTests(TestCase):
             password="test_password",
         )
         cls.borrowing = Borrowing.objects.create(
-            user = cls.user,
-            book = cls.book,
-            expected_return_date = now().date() + timedelta(days=10)
+            user=cls.user,
+            book=cls.book,
+            expected_return_date=now().date() + timedelta(days=10),
         )
 
-    def test_create_borrowing(self, ):
+    def test_create_borrowing(
+        self,
+    ):
         borrowings = Borrowing.objects.all()
         self.assertEqual(borrowings.count(), 1)
         self.assertIn(self.borrowing, borrowings)
 
     def test_borrowing_str(self):
-        self.assertEqual(str(self.borrowing), f"{self.user} email: {self.user.email} borrowed {self.book}")
+        self.assertEqual(
+            str(self.borrowing), f"{self.user} borrowed {self.book}"
+        )
