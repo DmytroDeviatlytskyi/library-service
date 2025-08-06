@@ -28,5 +28,6 @@ def notify_new_borrowing(sender, instance, created, **kwargs):
         )
         asyncio.run(send_telegram_message(message))
 
+
 async def send_telegram_message(message: str):
     await bot.send_message(chat_id=CHAT_ID, text=message)
